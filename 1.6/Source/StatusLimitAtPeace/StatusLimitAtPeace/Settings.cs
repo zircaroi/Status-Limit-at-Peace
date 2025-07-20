@@ -16,7 +16,9 @@ namespace StatusLimitAtPeace
         //1.5Add
         public bool ApplyOnDraftedPawns = true;
 
-        //public bool RaidBeaconIsHighDanger = true;
+        //1.6Add
+        public bool TreatDraftedPawnsAsHighDanger = true;
+        public bool TreatNotPlayerColonyMapAsHighDanger = true;
 
         //Variables for Max Stats
         //P: Peace, LD: Low Danger, HD: High Danger
@@ -82,6 +84,8 @@ namespace StatusLimitAtPeace
         private string Bed_B_HD;
         private string Joy_B_HD;
 
+        private Vector2 scrollPosition = Vector2.zero;
+
         //1.5Add
         public void Reset()
         {
@@ -90,6 +94,8 @@ namespace StatusLimitAtPeace
             ApplyOnNotEnemyFactionPawns = false;
             ApplyOnEnemyFactionPawns = true;
             ApplyOnDraftedPawns = true;
+            TreatDraftedPawnsAsHighDanger = true;
+            TreatNotPlayerColonyMapAsHighDanger = true;
             Move_P = 15f;
             Move_B_P = "15";
             Eating_P = 150f;
@@ -156,6 +162,10 @@ namespace StatusLimitAtPeace
             //1.5Add
             Scribe_Values.Look(ref ApplyOnDraftedPawns, "ApplyOnDraftedPawns", true);
 
+            //1.6Add
+            Scribe_Values.Look(ref TreatDraftedPawnsAsHighDanger, "TreatDraftedPawnsAsHighDanger", true);
+            Scribe_Values.Look(ref TreatNotPlayerColonyMapAsHighDanger, "TreatNotPlayerColonyMapAsHighDanger", true);
+
             Scribe_Values.Look(ref Move_P, "MaxMoveSpeedPeace", 15f);
             Scribe_Values.Look(ref Eating_P, "MaxEatingSpeedPeace", 150f);
             Scribe_Values.Look(ref GeneralLabor_P, "MaxGeneralLaborSpeedPeace", 400f);
@@ -192,7 +202,15 @@ namespace StatusLimitAtPeace
         public void DoWindowContents(Rect inRect)
         {
 
-            var gapHeight = 150f;
+            // スクロール可能な外枠
+            Rect outRect = inRect;
+            // コンテンツの実際の高さ（十分大きめに取るか、動的計算してもOK）
+            float contentHeight = 800f;
+            Rect viewRect = new Rect(0f, 0f, inRect.width - 16f, contentHeight);
+
+            Widgets.BeginScrollView(outRect, ref scrollPosition, viewRect);
+
+            var gapHeight = 220f;   //from 150f
             var controlDistance = 8f;
 
             var listing_Standard = new Listing_Standard();
@@ -250,7 +268,7 @@ namespace StatusLimitAtPeace
                 "[%]"
             };
 
-            listing_Standard.Begin(inRect);
+            listing_Standard.Begin(viewRect); //inRect
             listing_Standard.CheckboxLabeled("ApplyOnPlayerColonists".Translate(), ref ApplyOnPlayerColonists);
             listing_Standard.Gap(controlDistance);
             listing_Standard.CheckboxLabeled("ApplyOnPlayerNotColonists".Translate(), ref ApplyOnPlayerNotColonists);
@@ -261,11 +279,28 @@ namespace StatusLimitAtPeace
             listing_Standard.Gap(controlDistance);
             listing_Standard.CheckboxLabeled("ApplyOnDraftedPawns".Translate(), ref ApplyOnDraftedPawns);
             listing_Standard.Gap(controlDistance);
+            listing_Standard.CheckboxLabeled("TreatDraftedPawnsAsHighDanger".Translate(), ref TreatDraftedPawnsAsHighDanger);
+            listing_Standard.Gap(controlDistance);
+            listing_Standard.CheckboxLabeled("TreatNotPlayerColonyMapAsHighDanger".Translate(), ref TreatNotPlayerColonyMapAsHighDanger);
+            listing_Standard.Gap(controlDistance);
+
             listing_Standard.Gap(350f);
             listing_Standard.Label("DisableNote".Translate());
             if (listing_Standard.ButtonTextLabeledPct("SLAP.ResetValues".Translate(), "Reset".Translate(), 0.5f))
             {
-                Reset();
+                //Reset();
+                Find.WindowStack.Add(new Dialog_MessageBox(
+                /* text                 */ "Are you sure you want to reset the target defName list to defaults?",
+                /* buttonAText          */ "Reset".Translate(),
+                /* buttonAAction        */ () => { Reset(); },
+                /* buttonBText          */ "Cancel".Translate(),
+                /* buttonBAction        */ null,  // Cancel 時の Action（不要なら null）
+                /* title                */ null,
+                /* buttonADestructive   */ true,  // Reset ボタンを赤文字に
+                /* acceptAction         */ null,  // 追加の acceptAction（不要なら null）
+                /* cancelAction         */ null,  // 追加の cancelAction（不要なら null）
+                /* layer                */ WindowLayer.Dialog
+                ));
             }
 
             //Old code
@@ -289,7 +324,7 @@ namespace StatusLimitAtPeace
 
             /* First Column = Labels */
             listing_Standard.End();
-            listing_Standard2.Begin(inRect);
+            listing_Standard2.Begin(viewRect); //inRect
             listing_Standard2.ColumnWidth = 180f;
             listing_Standard2.Gap(gapHeight);
             foreach (var item in list)
@@ -399,6 +434,8 @@ namespace StatusLimitAtPeace
             listing_Standard2.TextFieldNumeric(ref Joy_HD, ref Joy_B_HD, 0.1f, 99999f);
             listing_Standard2.Gap(controlDistance);
             listing_Standard2.End();
+
+            Widgets.EndScrollView();
 
             /*
             listingSection1.NewColumn();

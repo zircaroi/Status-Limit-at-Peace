@@ -8,7 +8,7 @@ namespace StatusLimitAtPeace
     {
         public string TargetValue;
 
-        private bool verifyRequest(StatRequest req)
+        private bool VerifyRequest(StatRequest req)
         {
             if (!req.HasThing || !req.Thing.Spawned || req.Thing.Map == null)
             {
@@ -68,16 +68,38 @@ namespace StatusLimitAtPeace
             return true;
         }
 
+        private StoryDanger GetDangerRating(StatRequest req)
+        {
+            var map = req.Thing?.Map;
+
+            if (StatusLimitAtPeace.instance.SettingsObject.TreatNotPlayerColonyMapAsHighDanger && map != null && !map.IsPlayerHome)
+            {
+                return StoryDanger.High;
+            }
+
+            Pawn pawn = req.Thing as Pawn;
+            if (pawn == null || pawn.Faction == null)
+            {
+                return map?.dangerWatcher.DangerRating ?? StoryDanger.High;
+            }
+            if (StatusLimitAtPeace.instance.SettingsObject.TreatDraftedPawnsAsHighDanger && pawn.Drafted)
+            {
+                return StoryDanger.High;
+            }
+            return map.dangerWatcher.DangerRating;
+        }
+
         public override string ExplanationPart(StatRequest req)
         {
             var text = " (Status Limit at Peace)";
             var defaultValue = new TaggedString(string.Empty);
-            if (!verifyRequest(req))
+            if (!VerifyRequest(req))
             {
                 return defaultValue;
             }
 
-            var dangerRating = req.Thing.Map.dangerWatcher.DangerRating;
+            //var dangerRating = req.Thing.Map.dangerWatcher.DangerRating;
+            var dangerRating = GetDangerRating(req);
 
             string valueExplanation;
             if (req.Thing.def.IsBuildingArtificial)
@@ -295,12 +317,14 @@ namespace StatusLimitAtPeace
 
         public override void TransformValue(StatRequest req, ref float val)
         {
-            if (!verifyRequest(req))
+            if (!VerifyRequest(req))
             {
                 return;
             }
 
-            var dangerRating = req.Thing.Map.dangerWatcher.DangerRating;
+            //var dangerRating = req.Thing.Map.dangerWatcher.DangerRating;
+            var dangerRating = GetDangerRating(req);
+
             if (req.Thing.def.IsBuildingArtificial)
             {
                 switch (TargetValue)
