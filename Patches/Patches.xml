@@ -113,4 +113,67 @@
             </value>
         </match>
     </Operation>
+    <Operation Class="PatchOperationConditional">
+        <xpath>/Defs/StatDef[defName="RestRateMultiplier"]/parts</xpath>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>/Defs/StatDef[defName="RestRateMultiplier"]</xpath>
+            <value>
+                <parts>
+                    <li Class="StatusLimitAtPeace.StatusLimitStatPart">
+                        <TargetValue>RestRateMultiplier</TargetValue>
+                    </li>
+                </parts>
+            </value>
+        </nomatch>
+        <match Class="PatchOperationAdd">
+            <xpath>/Defs/StatDef[defName="RestRateMultiplier"]/parts</xpath>
+            <value>
+                <li Class="StatusLimitAtPeace.StatusLimitStatPart">
+                    <TargetValue>RestRateMultiplier</TargetValue>
+                </li>
+            </value>
+        </match>
+    </Operation>
+    <Operation Class="PatchOperationConditional">
+        <xpath>/Defs/StatDef[defName="BedRestEffectiveness"]/parts</xpath>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>/Defs/StatDef[defName="BedRestEffectiveness"]</xpath>
+            <value>
+                <parts>
+                    <li Class="StatusLimitAtPeace.StatusLimitStatPart">
+                        <TargetValue>BedRestEffectiveness</TargetValue>
+                    </li>
+                </parts>
+            </value>
+        </nomatch>
+        <match Class="PatchOperationAdd">
+            <xpath>/Defs/StatDef[defName="BedRestEffectiveness"]/parts</xpath>
+            <value>
+                <li Class="StatusLimitAtPeace.StatusLimitStatPart">
+                    <TargetValue>BedRestEffectiveness</TargetValue>
+                </li>
+            </value>
+        </match>
+    </Operation>
+    <Operation Class="PatchOperationConditional">
+        <xpath>/Defs/StatDef[defName="JoyGainFactor"]/parts</xpath>
+        <nomatch Class="PatchOperationAdd">
+            <xpath>/Defs/StatDef[defName="JoyGainFactor"]</xpath>
+            <value>
+                <parts>
+                    <li Class="StatusLimitAtPeace.StatusLimitStatPart">
+                        <TargetValue>JoyGainFactor</TargetValue>
+                    </li>
+                </parts>
+            </value>
+        </nomatch>
+        <match Class="PatchOperationAdd">
+            <xpath>/Defs/StatDef[defName="JoyGainFactor"]/parts</xpath>
+            <value>
+                <li Class="StatusLimitAtPeace.StatusLimitStatPart">
+                    <TargetValue>JoyGainFactor</TargetValue>
+                </li>
+            </value>
+        </match>
+    </Operation>
 </Patch>
