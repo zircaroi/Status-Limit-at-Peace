@@ -5,6 +5,8 @@
   <ApplyOnNotEnemyFactionPawns>Apply on not enemy faction pawns</ApplyOnNotEnemyFactionPawns>
   <ApplyOnEnemyFactionPawns>Apply on enemy faction pawns</ApplyOnEnemyFactionPawns>
   <ApplyOnDraftedPawns>Apply on drafted pawns</ApplyOnDraftedPawns>
+  <TreatDraftedPawnsAsHighDanger>Treat drafted pawns as always in high danger (valid only if "Apply on drafted pawns" is active)</TreatDraftedPawnsAsHighDanger>
+  <TreatNotPlayerColonyMapAsHighDanger>Treat not player colony map as always in high danger</TreatNotPlayerColonyMapAsHighDanger>
   <MaxMoveSpeed>Max Move Speed</MaxMoveSpeed>
   <MaxEatingSpeed>Max Eating Speed</MaxEatingSpeed>
   <MaxGeneralLaborSpeed>Max General Labor Speed</MaxGeneralLaborSpeed>
