@@ -290,7 +290,7 @@ namespace StatusLimitAtPeace
             {
                 //Reset();
                 Find.WindowStack.Add(new Dialog_MessageBox(
-                /* text                 */ "Are you sure you want to reset the target defName list to defaults?",
+                /* text                 */ "Are you sure you want to reset all settings to defaults?",
                 /* buttonAText          */ "Reset".Translate(),
                 /* buttonAAction        */ () => { Reset(); },
                 /* buttonBText          */ "Cancel".Translate(),

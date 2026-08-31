@@ -38,16 +38,15 @@ namespace StatusLimitAtPeace
 
             if (pawn.Faction == Faction.OfPlayer)
             {
-                if (!StatusLimitAtPeace.instance.SettingsObject.ApplyOnPlayerColonists &&
-                    !StatusLimitAtPeace.instance.SettingsObject.ApplyOnPlayerNotColonists)
+                if (pawn.def.race.Humanlike)
                 {
-                    return false;
+                    if (!StatusLimitAtPeace.instance.SettingsObject.ApplyOnPlayerColonists)
+                        return false;
                 }
-
-                if (!StatusLimitAtPeace.instance.SettingsObject.ApplyOnPlayerNotColonists &&
-                    !pawn.def.race.Humanlike)
+                else
                 {
-                    return false;
+                    if (!StatusLimitAtPeace.instance.SettingsObject.ApplyOnPlayerNotColonists)
+                        return false;
                 }
             }
             else
